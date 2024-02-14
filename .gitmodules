@@ -1,0 +1,3 @@
+[submodule "opgaves"]
+	path = opgaves
+	url = https://github.com/vlaamseprogrammeerwedstrijd/opgaves
