@@ -1,11 +1,14 @@
 from typing import List
 
 
-def readline(f) -> str:
-    return f.readline().strip()
+def readline(f=None) -> str:
+    if f is None:
+        return input().strip()
+    else:
+        return f.readline().strip()
 
 
-def ints_line(f) -> List[int]:
+def readints(f=None) -> List[int]:
     line = readline(f)
     if not line:
         return []
