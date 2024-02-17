@@ -47,12 +47,11 @@ for case in range(cases):
 
         # print(nx, ny)
         line = (min(cx, nx), min(cy, ny), n, hor)
-        if line in lines_set:
-            continue
 
-        lines.append(line)
-        lines_set.add(line)
-        line_to_nodes.append({(cx, cy), (nx, ny)})
+        if line not in lines_set:
+            lines.append(line)
+            lines_set.add(line)
+            line_to_nodes.append({(cx, cy), (nx, ny)})
 
         cx = nx
         cy = ny
