@@ -47,11 +47,12 @@ for case in range(cases):
 
         # print(nx, ny)
         line = (min(cx, nx), min(cy, ny), n, hor)
+        if line in lines_set:
+            continue
 
-        if line not in lines_set:
-            lines.append(line)
-            lines_set.add(line)
-            line_to_nodes.append({(cx, cy), (nx, ny)})
+        lines.append(line)
+        lines_set.add(line)
+        line_to_nodes.append({(cx, cy), (nx, ny)})
 
         cx = nx
         cy = ny
@@ -64,8 +65,8 @@ for case in range(cases):
             if ax <= node[0] <= ax + an * a_hor and ay <= node[1] <= ay + an * (1 - a_hor):
                 line_to_nodes[ai].add(node)
 
-#     print("start pair crossings")
-#     print(len(lines))
+    #     print("start pair crossings")
+    #     print(len(lines))
     for ai, (ax, ay, an, a_hor) in enumerate(lines):
         for bi, (bx, by, bn, b_hor) in enumerate(lines):
             if a_hor and not b_hor:
@@ -88,25 +89,15 @@ for case in range(cases):
         for node in nodes:
             node_to_lines[node].add(line)
 
-#     print("start dijkstra")
+    #     print("start dijkstra")
     best_dist_to = {(0, 0): 0}
-    todo = [(0, 0)]
+    todo = queue.PriorityQueue()
+    todo.put((0, (0, 0)))
 
-    while len(todo):
-        # curr_node = todo.pop()
-        # curr_dist = best_dist_to[curr_node]
-
-        # find best
-        curr_index = None
-        curr_dist = -1
-        for index, node in enumerate(todo):
-            dist = best_dist_to[node]
-            if curr_index is None or dist < curr_dist:
-                curr_index = index
-                curr_dist = dist
-        assert curr_index is not None
-        curr_node = todo[curr_index]
-        del todo[curr_index]
+    while todo.qsize():
+        curr_dist, curr_node = todo.get()
+        if best_dist_to[curr_node] < curr_dist:
+            continue
 
         # find children
         for line in node_to_lines[curr_node]:
@@ -117,7 +108,7 @@ for case in range(cases):
 
                 if next_node not in best_dist_to or next_dist < best_dist_to[next_node]:
                     best_dist_to[next_node] = next_dist
-                    todo.append(next_node)
+                    todo.put((next_dist, next_node))
 
     # print(lines)
     # print(nodes)
