@@ -7,49 +7,7 @@
 #         best_dist = dist
 # assert best_index is not None
 # del todo[best_index]
-
-
-def dijkstra(graph, starts, ends):
-    """
-    graph: dict of node -> (neighbor, distance)
-    starts: set of start nodes, all assumed with cost 0
-    ends: set of end nodes
-
-    returns: (distance, path including start and end)
-    """
-
-    import heapq
-
-    # priority queue of (dist, node, parent)
-    todo = [(0, start, None) for start in starts]
-    heapq.heapify(todo)
-
-    # node -> best parent
-    visited = {}
-
-    while todo:
-        dist, node, parent = heapq.heappop(todo)
-        # print(f"popped {dist, node, parent}")
-        if node in visited:
-            continue
-        visited[node] = parent
-
-        if node in ends:
-            # print(f"end node {node}")
-            path = []
-            curr = node
-            while curr is not None:
-                path.append(curr)
-                curr = visited[curr]
-            path.reverse()
-            return dist, path
-
-        for neighbor, weight in graph[node]:
-            if neighbor not in visited:
-                heapq.heappush(todo, (dist + weight, neighbor, node))
-
-    # TODO return all distances instead?
-    return None
+from oplossingen.dijkstra import dijkstra
 
 
 def readline():
@@ -130,39 +88,22 @@ for case in range(cases):
         for node in nodes:
             node_to_lines[node].add(line)
 
-    #     print("start dijkstra")
 
-    # covert to cleaner graph
-    node_to_nodes = {}
-    for node in node_to_lines:
+    def call_next(node):
+        if node == (0, 0):
+            return True, []
+
+        result = []
         for line in node_to_lines[node]:
             for next_node in line_to_nodes[line]:
                 ds = [abs(node[i] - next_node[i]) for i in range(2)]
                 assert max(ds) == sum(ds), ds
-                node_to_nodes.setdefault(node, []).append((next_node, max(ds)))
+                result.append((next_node, max(ds)))
+        return False, result
 
-    # call out to dijkstra
-    dist, _ = dijkstra(node_to_nodes, {(0, 0)}, {(cx, cy)})
-    #
-    # best_dist_to = {(0, 0): 0}
-    # todo = queue.PriorityQueue()
-    # todo.put((0, (0, 0)))
-    #
-    # while todo.qsize():
-    #     curr_dist, curr_node = todo.get()
-    #     if best_dist_to[curr_node] < curr_dist:
-    #         continue
-    #
-    #     # find children
-    #     for line in node_to_lines[curr_node]:
-    #         for next_node in line_to_nodes[line]:
-    #             ds = [abs(curr_node[i] - next_node[i]) for i in range(2)]
-    #             assert max(ds) == sum(ds), ds
-    #             next_dist = curr_dist + max(ds)
-    #
-    #             if next_node not in best_dist_to or next_dist < best_dist_to[next_node]:
-    #                 best_dist_to[next_node] = next_dist
-    #                 todo.put((next_dist, next_node))
+
+    result = dijkstra([(cx, cy)], call_next)
+    assert result.found
 
     # print(lines)
     # print(nodes)
@@ -170,4 +111,4 @@ for case in range(cases):
     # print(node_to_lines)
     # print(best_dist_to)
 
-    print(case + 1, dist)
+    print(case + 1, result.dist)
