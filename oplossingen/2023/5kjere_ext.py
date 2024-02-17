@@ -7,6 +7,8 @@
 #         best_dist = dist
 # assert best_index is not None
 # del todo[best_index]
+import queue
+
 
 def readline():
     return input().strip()
@@ -34,6 +36,7 @@ for case in range(cases):
 
     # (sx, sy, n, hor)
     lines = []
+    lines_set = set()
     cx, cy = 0, 0
     for n, r in steps:
         n = int(n)
@@ -43,19 +46,26 @@ for case in range(cases):
         ny = cy + n * sign * (1 - hor)
 
         # print(nx, ny)
-        lines.append((min(cx, nx), min(cy, ny), n, hor))
-        line_to_nodes.append({(cx, cy), (nx, ny)})
+        line = (min(cx, nx), min(cy, ny), n, hor)
+
+        if line not in lines_set:
+            lines.append(line)
+            lines_set.add(line)
+            line_to_nodes.append({(cx, cy), (nx, ny)})
 
         cx = nx
         cy = ny
 
     # print(nodes_on_line)
     # collect crossings
+    # print("start simple")
     for ai, (ax, ay, an, a_hor) in enumerate(lines):
         for node in [(0, 0), (cx, cy)]:
             if ax <= node[0] <= ax + an * a_hor and ay <= node[1] <= ay + an * (1 - a_hor):
                 line_to_nodes[ai].add(node)
 
+#     print("start pair crossings")
+#     print(len(lines))
     for ai, (ax, ay, an, a_hor) in enumerate(lines):
         for bi, (bx, by, bn, b_hor) in enumerate(lines):
             if a_hor and not b_hor:
@@ -72,11 +82,13 @@ for case in range(cases):
                 line_to_nodes[ai].add((ax, ay))
                 line_to_nodes[bi].add((ax, ay))
 
+    # print("start node to lines")
     node_to_lines = {n: set() for line in line_to_nodes for n in line}
     for line, nodes in enumerate(line_to_nodes):
         for node in nodes:
             node_to_lines[node].add(line)
 
+#     print("start dijkstra")
     best_dist_to = {(0, 0): 0}
     todo = [(0, 0)]
 
