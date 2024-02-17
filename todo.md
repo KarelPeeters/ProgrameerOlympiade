@@ -7,3 +7,4 @@
   * TSP
   * full ILP solver?
 * write a proper template with utils, main function, main header, ...
+  * including case count parsing and output
