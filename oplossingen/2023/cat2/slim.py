@@ -33,9 +33,11 @@ for case in range(cases):
                 curr_length = length
 
                 while curr_length > 0:
-                    curr_length -= 1
-                    curr_cost += prices[curr_time//60] * usage
-                    curr_time += 1
+                    take = min(60, curr_length, 60 - (curr_time % 60))
+
+                    curr_length -= take
+                    curr_cost += take * prices[curr_time // 60] * usage
+                    curr_time += take
 
                 # print(f"  => cost: {curr_cost}")
 
