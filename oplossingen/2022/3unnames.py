@@ -1,51 +1,30 @@
-from functools import cache
+from oplossingen.fenwick import FenwickIndexTree
+from oplossingen.lib import readline, readints
 
-from oplossing.lib import *
+cases = int(readline())
 
-with open("../../opgaves/2022/cat4/untitled4/wedstrijd.invoer") as f:
-    cases = int(f.readline().strip())
+for case in range(cases):
+    # parse
+    n = int(readline())
+    a = readints()
+    assert len(a) == n
 
-    for case in range(cases):
-        # parse
-        n = int(readline(f))
-        a = ints_line(f)
-        assert len(a) == n
+    # calc
+    tree = FenwickIndexTree(n)
 
-        # print(n, a)
+    sort_pos_to_a_pos = sorted(range(n), key=lambda i: a[i])
+    a_pos_to_sort_pos = [-1] * n
+    for x, y in enumerate(sort_pos_to_a_pos):
+        a_pos_to_sort_pos[y] = x
 
-        cache = {}
+    result_rev = []
 
+    for i in reversed(range(n)):
+        ai = a_pos_to_sort_pos[i]
+        result_rev.append(tree.query(ai))
+        tree.update(ai, 1)
 
-        # def eval(v, i):
-        #     if i >= len(a):
-        #         return 0
-        #
-        #     key = (v, i)
-        #     if key in cache:
-        #         return cache[key]
-        #
-        #     for j in reversed(range(i + 1, len(a))):
-        #         eval(v, j)
-        #
-        #     result = (v < a[i]) + eval(v, i + 1)
-        #     cache[key] = result
-        #     return result
+    result = result_rev[::-1]
 
-        result = []
-        hist = []
-        for i in reversed(range(len(a))):
-
-            result.append(max((v for k, v in hist.items() if k < a[i]), default=0))
-
-            hist.setdefault(a[i], 0)
-            hist[a[i]] += 1
-
-
-        # result = []
-        # for i in range(len(a)):
-        #     result.append(eval(a[i], i + 1))
-        result.reverse()
-
-        # TODO output
-        print(" ".join(str(x) for x in [case + 1] + result))
-        # sys.exit(0)
+    # output
+    print(" ".join(str(x) for x in [case + 1] + result))
