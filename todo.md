@@ -7,10 +7,13 @@
   * set cover problem
   * TSP
   * full ILP solver?
+  * Floyd Marshall
+  * A*
+  * Union find
+  * graph connected components
 * write a proper template with utils, main function, main header, ...
   * including case count parsing and output
 * fallback rust/C template for if python really is too slow?
-* Floyd Marshall
 
 # Notes
 
