@@ -32,13 +32,18 @@ class UnionFind:
         parentX = self.find(x)
         parentY = self.find(y)
         if parentX != parentY:
-            if self.rank.get(parentX, 1) > self.rank.get(parentY, 1):
+            px_count = self.rank.get(parentX, 1)
+            py_count = self.rank.get(parentY, 1)
+            combine_rank = px_count + py_count + 1
+            if px_count > py_count:
                 self.parent[parentY] = parentX
-            elif self.rank.get(parentX, 1) < self.rank.get(parentY, 1):
+                self.rank[parentX] = combine_rank
+            elif px_count < py_count:
                 self.parent[parentX] = parentY
+                self.rank[parentY] = combine_rank
             else:
                 self.parent[parentY] = parentX
-                self.rank[parentX] = self.rank.get(parentX, 1) + 1
+                self.rank[parentX] = combine_rank
 
     # Returns wether this node exists in the union
     def does_union_contain(self, x):
