@@ -39,7 +39,7 @@ def pathfind(starts: List[T], next: Callable[[T], Tuple[bool, Iterable[Tuple[T, 
     while todo:
         _, dist, node, parent = heapq.heappop(todo)
 
-        if node in visited:
+        if node in visited and visited[node][0] <= dist:
             continue
         visited[node] = (dist, parent)
 
