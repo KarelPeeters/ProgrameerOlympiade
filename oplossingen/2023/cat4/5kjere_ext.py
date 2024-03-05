@@ -7,7 +7,7 @@
 #         best_dist = dist
 # assert best_index is not None
 # del todo[best_index]
-from oplossingen.dijkstra import dijkstra
+from oplossingen.pathfind import pathfind
 
 
 def readline():
@@ -102,7 +102,12 @@ for case in range(cases):
         return False, result
 
 
-    result = dijkstra([(cx, cy)], call_next)
+    def heuristic(node):
+        x, y = node
+        return abs(x) + abs(y)
+
+
+    result = pathfind([(cx, cy)], call_next, heuristic)
     assert result.found
 
     # print(lines)

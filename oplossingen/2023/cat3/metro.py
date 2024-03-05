@@ -1,4 +1,4 @@
-from oplossingen.dijkstra import dijkstra
+from oplossingen.pathfind import pathfind
 from oplossingen.lib import readline, readints
 
 cases = int(readline())
@@ -37,7 +37,7 @@ for case in range(cases):
             return False, result
 
 
-        result = dijkstra([start], call_next)
+        result = pathfind([start], call_next)
         if result.found:
             print(case+1, f"{result.dist}")
         else:

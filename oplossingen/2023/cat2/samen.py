@@ -1,4 +1,4 @@
-from oplossingen.dijkstra import dijkstra
+from oplossingen.pathfind import pathfind
 from oplossingen.lib import readline, readints, ortho_neighbors
 
 cases = int(readline())
@@ -34,7 +34,7 @@ for case in range(cases):
             return False, others
 
 
-        result = dijkstra([(r, c)], call_next)
+        result = pathfind([(r, c)], call_next)
         assert not result.found
 
         for nr, nc in result.visited.keys():

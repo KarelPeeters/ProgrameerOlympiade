@@ -1,6 +1,6 @@
 from collections import defaultdict
 import time
-from oplossingen.dijkstra import dijkstra
+from oplossingen.pathfind import pathfind
 
 def readline():
     return input().strip()
@@ -48,6 +48,6 @@ for case in range(cases):
         return False, result
 
 
-    result = dijkstra([(cx, cy)], call_next)
+    result = pathfind([(cx, cy)], call_next)
     assert result.found
     print(case + 1, result.dist)
