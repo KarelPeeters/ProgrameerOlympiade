@@ -1,3 +1,4 @@
+from functools import cache
 from oplossingen.lib import readint, readints
 
 
@@ -8,14 +9,9 @@ for case in range(cases):
     pairs = [tuple(readints()) for _ in range(n)]
 
     best = 0
-    cache = set()
 
+    @cache
     def solve(left: int, taken: int, ca: int, cb: int):
-        key = (left, taken, ca, cb)
-        if key in cache:
-            return
-        cache.add(key)
-
         global best
         assert ca <= ma and cb <= mb
         if left + taken < best:
