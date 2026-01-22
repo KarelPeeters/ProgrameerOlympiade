@@ -23,10 +23,10 @@ for _ in range(n):
                     return True
             return False
 
-        for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+        for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1)):
             nx = cx + dx
             ny = cy + dy
-            if not (nx in range(w) and ny in range(h)):
+            if not (0 <= nx < w and 0 <= ny < h):
                 continue
 
             nm = 1 << (nx + ny * w)
